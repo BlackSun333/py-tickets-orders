@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import F, Count
 
@@ -17,6 +18,11 @@ from cinema.serializers import (
     OrderSerializer,
     OrderCreateSerializer,
 )
+
+
+class OrderPagination(PageNumberPagination):
+    page_size = 1
+    page_size_query_param = "page_size"
 
 
 class GenreViewSet(viewsets.ModelViewSet):
@@ -94,6 +100,7 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
+    pagination_class = OrderPagination
     http_method_names = ["get", "post"]
 
     def get_queryset(self):
